@@ -33,5 +33,5 @@ message GetCourseInfoRequest {}
 message CourseInfoResponse {
     int id = 1;
     string course = 2;
-    string price = 3;
+    int price = 3;
 }
