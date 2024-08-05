@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package payment;
+
+service PaymentService {
+    rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
+}
+
+message ProcessPaymentRequest {
+    string course = 1;
+    int price = 2;
+}
+
+message ProcessPaymentResponse {
+    string transaction_id = 2;
+}
