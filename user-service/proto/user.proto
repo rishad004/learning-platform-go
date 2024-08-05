@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package user;
 
+option go_package = "github.com/rishad004/learning-platform-go/user-service";
+
 service UserService {
     rpc SignUp(SignUpRequest) returns (SignUpResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
