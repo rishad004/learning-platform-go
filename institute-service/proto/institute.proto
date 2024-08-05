@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package admin;
+package institute;
 
 service AdminService {
     rpc Login(LoginRequest) returns (LoginResponse);
