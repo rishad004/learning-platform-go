@@ -28,7 +28,7 @@ message BlockUnblockUserResponse {
 
 message AddCourseRequest {
     string course = 1;
-    int price = 2;
+    int32 price = 2;
 }
 
 message AddCourseResponse {
