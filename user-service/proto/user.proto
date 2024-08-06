@@ -33,7 +33,7 @@ message LoginResponse {
 message GetCourseInfoRequest {}
 
 message CourseInfoResponse {
-    int id = 1;
+    int32 id = 1;
     string course = 2;
-    int price = 3;
+    int32 price = 3;
 }
