@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package enrollment;
 
+option go_package = "github.com/rishad004/learning-platform-go/enrollment-service";
+
 service EnrollmentService {
     rpc BookCourse(BookCourseRequest) returns (BookCourseResponse);
 }
