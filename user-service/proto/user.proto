@@ -32,8 +32,12 @@ message LoginResponse {
 
 message GetCourseInfoRequest {}
 
-message CourseInfoResponse {
+message Course{
     int32 id = 1;
     string course = 2;
     int32 price = 3;
+}
+
+message CourseInfoResponse {
+    repeated Course courses = 1;
 }
