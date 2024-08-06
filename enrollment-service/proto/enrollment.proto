@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package enrollment;
+
+service EnrollmentService {
+    rpc BookCourse(BookCourseRequest) returns (BookCourseResponse);
+}
+
+message BookCourseRequest {
+    string user_id = 1;
+    string course = 2;
+}
+
+message BookCourseResponse {
+    string razor_id = 1;
+    string message = 2;
+}
