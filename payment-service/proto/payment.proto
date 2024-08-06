@@ -8,7 +8,7 @@ service PaymentService {
 
 message ProcessPaymentRequest {
     string course = 1;
-    int price = 2;
+    int32 price = 2;
 }
 
 message ProcessPaymentResponse {
