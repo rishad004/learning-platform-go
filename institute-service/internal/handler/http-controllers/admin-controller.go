@@ -12,6 +12,10 @@ type InstituteHandler struct {
 	Service service.InstituteService
 }
 
+func (h *InstituteHandler) AdminRouters(r *gin.Engine) {
+	r.POST("/login/admin", h.Login)
+}
+
 func (h *InstituteHandler) Login(c *gin.Context) {
 	var admin model.Amdin
 
