@@ -31,7 +31,7 @@ func main() {
 		log.Fatal("failed to listen, err: ", err)
 	}
 
-	log.Println("Server listening on port :8081")
+	log.Println("Server listening on port :8080")
 	if err := g.Serve(listen); err != nil {
 		log.Fatal("failed to listen - err: ", err)
 	}
