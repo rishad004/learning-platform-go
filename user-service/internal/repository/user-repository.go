@@ -51,6 +51,6 @@ func (r *userRepo) FindByUsername(user model.Users) error {
 	if err != nil {
 		return err
 	}
-	c.SetCookie("Jwt-User", token, int((time.Hour * 1).Seconds()), "/", "byecom.shop", false, false)
+	c.SetCookie("Jwt-User", token, int((time.Hour * 1).Seconds()), "/", "localhost", false, false)
 	return nil
 }
