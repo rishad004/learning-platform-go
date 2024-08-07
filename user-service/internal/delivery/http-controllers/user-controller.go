@@ -23,5 +23,17 @@ func (u *UserHandler) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body!"})
 		return
 	}
-	u.Service.Signup(user)
+	if err := u.Service.Signup(user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't create user!"})
+		return
+	}
+}
+
+func (u *UserHandler) Login(c *gin.Context) {
+	var user model.Users
+
+	if err := c.ShouldBind(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body!"})
+		return
+	}
 }
