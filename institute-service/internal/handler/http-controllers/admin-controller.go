@@ -2,12 +2,10 @@ package httpcontrollers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rishad004/learning-platform-go/institute-service/internal/model"
 	"github.com/rishad004/learning-platform-go/institute-service/internal/service"
-	"github.com/rishad004/learning-platform-go/institute-service/pkg"
 )
 
 type InstituteHandler struct {
@@ -25,12 +23,6 @@ func (h *InstituteHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid email or password!"})
 		return
 	}
-	token, err := pkg.JwtCreate(admin.ID, admin.Username)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't login try again later"})
-	}
-
-	c.SetCookie("Jwt-Admin", token, int((time.Hour * 1).Seconds()), "/", "localhost", false, false)
 
 	c.JSON(http.StatusOK, gin.H{"message": "login successful!"})
 }
