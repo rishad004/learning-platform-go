@@ -32,7 +32,7 @@ func (r *instituteRepo) FindByAdminname(admin model.Amdin) error {
 	if admin.Password != check.Password {
 		return errors.New("password mismatch")
 	}
-	token, err := pkg.JwtCreate(admin.ID, admin.Username)
+	token, err := pkg.JwtCreate(check.ID, check.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't login try again later"})
 	}
