@@ -13,6 +13,7 @@ import (
 
 type InstituteRepo interface {
 	FindByAdminname(admin model.Amdin) error
+	CreateCourse(course model.Courses) error
 }
 
 type instituteRepo struct {
@@ -38,5 +39,12 @@ func (r *instituteRepo) FindByAdminname(admin model.Amdin) error {
 	}
 
 	c.SetCookie("Jwt-Admin", token, int((time.Hour * 1).Seconds()), "/", "localhost", false, false)
+	return nil
+}
+
+func (r *instituteRepo) CreateCourse(course model.Courses) error {
+	if err := r.DB.Create(&course).Error; err != nil {
+		return err
+	}
 	return nil
 }
