@@ -27,6 +27,7 @@ func (u *UserHandler) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't create user!"})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{"message": "user created successfully!"})
 }
 
 func (u *UserHandler) Login(c *gin.Context) {
@@ -36,4 +37,5 @@ func (u *UserHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body!"})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{"message": "successfully logged in!"})
 }
