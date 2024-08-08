@@ -53,3 +53,12 @@ func (h *InstituteHandler) AddCourse(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "course created successfully!"})
 }
+
+func (h *InstituteHandler) GetCourseInfo(c *gin.Context) {
+	courses, err := h.Service.GetCourseInfo()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't fetch the course data!"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"courses": courses})
+}

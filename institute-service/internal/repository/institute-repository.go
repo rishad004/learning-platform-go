@@ -10,6 +10,7 @@ import (
 type InstituteRepo interface {
 	FindByAdminname(admin model.Amdin) (model.Amdin, error)
 	CreateCourse(course model.Courses) error
+	FetchCourses() ([]model.Courses, error)
 }
 
 type instituteRepo struct {
@@ -36,4 +37,12 @@ func (r *instituteRepo) CreateCourse(course model.Courses) error {
 		return err
 	}
 	return nil
+}
+
+func (r *instituteRepo) FetchCourses() ([]model.Courses, error) {
+	var courses []model.Courses
+	if err := r.DB.Find(&courses).Error; err != nil {
+		return nil, err
+	}
+	return courses, nil
 }

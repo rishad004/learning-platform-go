@@ -5,11 +5,13 @@ import "github.com/rishad004/learning-platform-go/institute-service/internal/mod
 type InstituteRepo interface {
 	FindByAdminname(admin model.Amdin) (model.Amdin, error)
 	CreateCourse(course model.Courses) error
+	FetchCourses() ([]model.Courses, error)
 }
 
 type InstituteService interface {
 	Login(admin model.Amdin) (model.Amdin, error)
 	AddCourse(course model.Courses) error
+	GetCourseInfo() ([]model.Courses, error)
 }
 
 type instituteService struct {
@@ -33,4 +35,12 @@ func (s *instituteService) AddCourse(course model.Courses) error {
 		return err
 	}
 	return nil
+}
+
+func (s *instituteService) GetCourseInfo() ([]model.Courses, error) {
+	courses, err := s.repo.FetchCourses()
+	if err != nil {
+		return nil, err
+	}
+	return courses, nil
 }
