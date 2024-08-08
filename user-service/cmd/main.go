@@ -8,8 +8,8 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	grpchandlers "github.com/rishad004/learning-platform-go/user-service/internal/delivery/grpc-handlers"
-	httpcontrollers "github.com/rishad004/learning-platform-go/user-service/internal/delivery/http-controllers"
+	grpchandlers "github.com/rishad004/learning-platform-go/user-service/internal/handler/grpc-handlers"
+	httpcontrollers "github.com/rishad004/learning-platform-go/user-service/internal/handler/http-controllers"
 	"github.com/rishad004/learning-platform-go/user-service/internal/repository"
 	"github.com/rishad004/learning-platform-go/user-service/internal/service"
 	"github.com/rishad004/learning-platform-go/user-service/pkg"
