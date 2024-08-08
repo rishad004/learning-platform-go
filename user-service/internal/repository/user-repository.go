@@ -1,18 +1,14 @@
 package repository
 
 import (
-	"time"
-
-	"github.com/gin-gonic/gin"
 	"github.com/rishad004/learning-platform-go/user-service/internal/model"
-	"github.com/rishad004/learning-platform-go/user-service/pkg"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type UserRepo interface {
 	CreateUser(user model.Users) error
-	FindByUsername(user model.Users) error
+	FindByUsername(user model.Users) (model.Users, error)
 }
 
 type userRepo struct {
@@ -38,19 +34,13 @@ func (r *userRepo) CreateUser(user model.Users) error {
 	return nil
 }
 
-func (r *userRepo) FindByUsername(user model.Users) error {
-	var c *gin.Context
+func (r *userRepo) FindByUsername(user model.Users) (model.Users, error) {
 	var check model.Users
 	if err := r.DB.First(&check, "Username=?", user.Username).Error; err != nil {
-		return err
+		return model.Users{}, err
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(check.Password), []byte(user.Password)); err != nil {
-		return err
+		return model.Users{}, err
 	}
-	token, err := pkg.JwtCreate(check.ID, check.Email)
-	if err != nil {
-		return err
-	}
-	c.SetCookie("Jwt-User", token, int((time.Hour * 1).Seconds()), "/", "localhost", false, false)
-	return nil
+	return check, nil
 }
