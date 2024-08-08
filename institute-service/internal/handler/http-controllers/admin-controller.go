@@ -18,6 +18,7 @@ func (h *InstituteHandler) AdminRouters(r *gin.Engine) {
 	r.POST("/login/admin", h.Login)
 	r.POST("/course", h.AddCourse)
 	r.GET("/course", h.GetCourseInfo)
+	r.DELETE("/course", h.RemoveCourse)
 }
 
 func NewInstituteController(svc service.InstituteService) *InstituteHandler {
@@ -56,6 +57,15 @@ func (h *InstituteHandler) AddCourse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't create course!"})
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "course created successfully!"})
+}
+
+func (h *InstituteHandler) RemoveCourse(c *gin.Context) {
+	Id := c.Query("id")
+	if err := h.Service.RemoveCourse(Id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't delete the course!"})
+		return
+	}
+	c.JSONP(http.StatusBadRequest, gin.H{"message": "successfully deleted the course!"})
 }
 
 func (h *InstituteHandler) GetCourseInfo(c *gin.Context) {

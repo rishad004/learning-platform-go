@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/rishad004/learning-platform-go/institute-service/internal/model"
 	"gorm.io/gorm"
@@ -11,6 +12,7 @@ type InstituteRepo interface {
 	FindByAdminname(admin model.Amdin) (model.Amdin, error)
 	CreateCourse(course model.Courses) error
 	FetchCourses() ([]model.Courses, error)
+	DeleteCourseById(Id string) error
 }
 
 type instituteRepo struct {
@@ -45,4 +47,15 @@ func (r *instituteRepo) FetchCourses() ([]model.Courses, error) {
 		return nil, err
 	}
 	return courses, nil
+}
+
+func (r *instituteRepo) DeleteCourseById(Id string) error {
+	id, err := strconv.Atoi(Id)
+	if err != nil {
+		return err
+	}
+	if err = r.DB.Where("ID=?", id).Delete(model.Courses{}).Error; err != nil {
+		return err
+	}
+	return nil
 }
