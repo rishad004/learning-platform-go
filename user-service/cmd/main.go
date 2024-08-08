@@ -28,10 +28,10 @@ func main() {
 		log.Fatalf("Failed to connect to user service: %v", err)
 	}
 	defer connInstitute.Close()
-	hotelService := institute_pb.NewAdminServiceClient(connInstitute)
+	instituteService := institute_pb.NewAdminServiceClient(connInstitute)
 
 	repo := repository.NewUserRepository(Db)
-	userService := service.NewUserService(repo, hotelService)
+	userService := service.NewUserService(repo, instituteService)
 	userHandler := grpchandlers.NewUserHandler(userService)
 	httpController := httpcontrollers.NewUserController(userService)
 
