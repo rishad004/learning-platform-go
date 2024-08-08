@@ -23,12 +23,12 @@ func main() {
 
 	Db := pkg.InitDatabase()
 
-	connHotel, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	connInstitute, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Failed to connect to user service: %v", err)
 	}
-	defer connHotel.Close()
-	hotelService := institute_pb.NewAdminServiceClient(connHotel)
+	defer connInstitute.Close()
+	hotelService := institute_pb.NewAdminServiceClient(connInstitute)
 
 	repo := repository.NewUserRepository(Db)
 	userService := service.NewUserService(repo, hotelService)
