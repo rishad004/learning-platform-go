@@ -16,9 +16,9 @@ type InstituteHandler struct {
 
 func (h *InstituteHandler) AdminRouters(r *gin.Engine) {
 	r.POST("/login/admin", h.Login)
-	r.POST("/course", h.AddCourse)
-	r.GET("/course", h.GetCourseInfo)
-	r.DELETE("/course", h.RemoveCourse)
+	r.POST("/course", pkg.Middleware, h.AddCourse)
+	r.GET("/course", pkg.Middleware, h.GetCourseInfo)
+	r.DELETE("/course", pkg.Middleware, h.RemoveCourse)
 }
 
 func NewInstituteController(svc service.InstituteService) *InstituteHandler {
