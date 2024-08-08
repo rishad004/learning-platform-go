@@ -3,12 +3,12 @@ package service
 import "github.com/rishad004/learning-platform-go/institute-service/internal/model"
 
 type InstituteRepo interface {
-	FindByAdminname(admin model.Amdin) error
+	FindByAdminname(admin model.Amdin) (model.Amdin, error)
 	CreateCourse(course model.Courses) error
 }
 
 type InstituteService interface {
-	Login(admin model.Amdin) error
+	Login(admin model.Amdin) (model.Amdin, error)
 	AddCourse(course model.Courses) error
 }
 
@@ -20,11 +20,12 @@ func NewInstituteService(repo InstituteRepo) InstituteService {
 	return &instituteService{repo: repo}
 }
 
-func (s *instituteService) Login(admin model.Amdin) error {
-	if err := s.repo.FindByAdminname(admin); err != nil {
-		return err
+func (s *instituteService) Login(admin model.Amdin) (model.Amdin, error) {
+	check, err := s.repo.FindByAdminname(admin)
+	if err != nil {
+		return model.Amdin{}, err
 	}
-	return nil
+	return check, nil
 }
 
 func (s *instituteService) AddCourse(course model.Courses) error {

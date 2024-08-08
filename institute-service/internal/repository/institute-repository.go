@@ -2,17 +2,13 @@ package repository
 
 import (
 	"errors"
-	"net/http"
-	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/rishad004/learning-platform-go/institute-service/internal/model"
-	"github.com/rishad004/learning-platform-go/institute-service/pkg"
 	"gorm.io/gorm"
 )
 
 type InstituteRepo interface {
-	FindByAdminname(admin model.Amdin) error
+	FindByAdminname(admin model.Amdin) (model.Amdin, error)
 	CreateCourse(course model.Courses) error
 }
 
@@ -24,22 +20,15 @@ func NewInstituteRepository(db *gorm.DB) InstituteRepo {
 	return &instituteRepo{DB: db}
 }
 
-func (r *instituteRepo) FindByAdminname(admin model.Amdin) error {
+func (r *instituteRepo) FindByAdminname(admin model.Amdin) (model.Amdin, error) {
 	var check model.Amdin
-	var c *gin.Context
 	if err := r.DB.First(&check, "Username=?", admin.Username).Error; err != nil {
-		return nil
+		return model.Amdin{}, err
 	}
 	if admin.Password != check.Password {
-		return errors.New("password mismatch")
+		return model.Amdin{}, errors.New("password mismatch")
 	}
-	token, err := pkg.JwtCreate(check.ID, check.Username)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't login try again later"})
-	}
-
-	c.SetCookie("Jwt-Admin", token, int((time.Hour * 1).Seconds()), "/", "localhost", false, false)
-	return nil
+	return check, nil
 }
 
 func (r *instituteRepo) CreateCourse(course model.Courses) error {
