@@ -19,6 +19,10 @@ func (h *InstituteHandler) AdminRouters(r *gin.Engine) {
 	r.POST("/course", h.AddCourse)
 }
 
+func NewInstituteController(svc service.InstituteService) *InstituteHandler {
+	return &InstituteHandler{Service: svc}
+}
+
 func (h *InstituteHandler) Login(c *gin.Context) {
 	var admin model.Amdin
 
