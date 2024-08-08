@@ -1,6 +1,9 @@
 package service
 
-import "github.com/rishad004/learning-platform-go/user-service/internal/model"
+import (
+	"github.com/rishad004/learning-platform-go/user-service/internal/model"
+	institute_pb "github.com/rishad004/learning-platform-go/user-service/proto/client/institute"
+)
 
 type UserRepo interface {
 	CreateUser(user model.Users) error
@@ -13,11 +16,12 @@ type UserService interface {
 }
 
 type userService struct {
-	repo UserRepo
+	instituteClient institute_pb.AdminServiceClient
+	repo            UserRepo
 }
 
-func NewUserService(repo UserRepo) *userService {
-	return &userService{repo: repo}
+func NewUserService(repo UserRepo, instituteService institute_pb.AdminServiceClient) *userService {
+	return &userService{repo: repo, instituteClient: instituteService}
 }
 
 func (u *userService) Signup(user model.Users) error {

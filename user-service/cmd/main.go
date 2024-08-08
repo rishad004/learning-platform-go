@@ -14,6 +14,7 @@ import (
 	"github.com/rishad004/learning-platform-go/user-service/internal/service"
 	"github.com/rishad004/learning-platform-go/user-service/pkg"
 	pb "github.com/rishad004/learning-platform-go/user-service/proto"
+	institute_pb "github.com/rishad004/learning-platform-go/user-service/proto/client/institute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -22,8 +23,15 @@ func main() {
 
 	Db := pkg.InitDatabase()
 
+	connHotel, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to connect to user service: %v", err)
+	}
+	defer connHotel.Close()
+	hotelService := institute_pb.NewAdminServiceClient(connHotel)
+
 	repo := repository.NewUserRepository(Db)
-	userService := service.NewUserService(repo)
+	userService := service.NewUserService(repo, hotelService)
 	userHandler := grpchandlers.NewUserHandler(userService)
 	httpController := httpcontrollers.NewUserController(userService)
 
