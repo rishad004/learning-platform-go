@@ -52,6 +52,9 @@ func (h *InstituteHandler) AddCourse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body!"})
 		return
 	}
+	if err := h.Service.AddCourse(course); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't create course!"})
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "course created successfully!"})
 }
 

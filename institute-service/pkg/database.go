@@ -19,6 +19,6 @@ func InitDatabase() *gorm.DB {
 		panic(err)
 	}
 
-	Db.AutoMigrate(&model.Amdin{})
+	Db.AutoMigrate(&model.Amdin{}, &model.Courses{})
 	return Db
 }
