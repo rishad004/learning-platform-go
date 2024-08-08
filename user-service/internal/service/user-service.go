@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/rishad004/learning-platform-go/user-service/internal/model"
 	institute_pb "github.com/rishad004/learning-platform-go/user-service/proto/client/institute"
 )
@@ -13,6 +15,7 @@ type UserRepo interface {
 type UserService interface {
 	Signup(user model.Users) error
 	Login(user model.Users) (model.Users, error)
+	GetCourseInfo() (*institute_pb.CourseInfoResponse, error)
 }
 
 type userService struct {
@@ -37,4 +40,12 @@ func (u *userService) Login(user model.Users) (model.Users, error) {
 		return model.Users{}, err
 	}
 	return check, nil
+}
+
+func (u *userService) GetCourseInfo() (*institute_pb.CourseInfoResponse, error) {
+	course, err := u.instituteClient.GetCourseInfo(context.Background(), &institute_pb.GetCourseInfoRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return course, nil
 }
