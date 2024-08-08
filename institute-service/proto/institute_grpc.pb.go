@@ -23,6 +23,7 @@ const (
 	AdminService_BlockUnblockUser_FullMethodName = "/institute.AdminService/BlockUnblockUser"
 	AdminService_AddCourse_FullMethodName        = "/institute.AdminService/AddCourse"
 	AdminService_DeleteCourse_FullMethodName     = "/institute.AdminService/DeleteCourse"
+	AdminService_GetCourseInfo_FullMethodName    = "/institute.AdminService/GetCourseInfo"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -33,6 +34,7 @@ type AdminServiceClient interface {
 	BlockUnblockUser(ctx context.Context, in *BlockUnblockUserRequest, opts ...grpc.CallOption) (*BlockUnblockUserResponse, error)
 	AddCourse(ctx context.Context, in *AddCourseRequest, opts ...grpc.CallOption) (*AddCourseResponse, error)
 	DeleteCourse(ctx context.Context, in *DeleteCourseRequest, opts ...grpc.CallOption) (*DeleteCourseResponse, error)
+	GetCourseInfo(ctx context.Context, in *GetCourseInfoRequest, opts ...grpc.CallOption) (*CourseInfoResponse, error)
 }
 
 type adminServiceClient struct {
@@ -83,6 +85,16 @@ func (c *adminServiceClient) DeleteCourse(ctx context.Context, in *DeleteCourseR
 	return out, nil
 }
 
+func (c *adminServiceClient) GetCourseInfo(ctx context.Context, in *GetCourseInfoRequest, opts ...grpc.CallOption) (*CourseInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CourseInfoResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetCourseInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type AdminServiceServer interface {
 	BlockUnblockUser(context.Context, *BlockUnblockUserRequest) (*BlockUnblockUserResponse, error)
 	AddCourse(context.Context, *AddCourseRequest) (*AddCourseResponse, error)
 	DeleteCourse(context.Context, *DeleteCourseRequest) (*DeleteCourseResponse, error)
+	GetCourseInfo(context.Context, *GetCourseInfoRequest) (*CourseInfoResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedAdminServiceServer) AddCourse(context.Context, *AddCourseRequ
 }
 func (UnimplementedAdminServiceServer) DeleteCourse(context.Context, *DeleteCourseRequest) (*DeleteCourseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCourse not implemented")
+}
+func (UnimplementedAdminServiceServer) GetCourseInfo(context.Context, *GetCourseInfoRequest) (*CourseInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCourseInfo not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 func (UnimplementedAdminServiceServer) testEmbeddedByValue()                      {}
@@ -206,6 +222,24 @@ func _AdminService_DeleteCourse_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_GetCourseInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCourseInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetCourseInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetCourseInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetCourseInfo(ctx, req.(*GetCourseInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCourse",
 			Handler:    _AdminService_DeleteCourse_Handler,
+		},
+		{
+			MethodName: "GetCourseInfo",
+			Handler:    _AdminService_GetCourseInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -9,6 +9,7 @@ service AdminService {
     rpc BlockUnblockUser(BlockUnblockUserRequest) returns (BlockUnblockUserResponse);
     rpc AddCourse(AddCourseRequest) returns (AddCourseResponse);
     rpc DeleteCourse(DeleteCourseRequest) returns (DeleteCourseResponse);
+    rpc GetCourseInfo(GetCourseInfoRequest) returns (CourseInfoResponse);
 }
 
 message LoginRequest {
@@ -39,4 +40,16 @@ message DeleteCourseRequest {}
 
 message DeleteCourseResponse {
     string message = 2;
+}
+
+message GetCourseInfoRequest {}
+
+message Course{
+    int32 id = 1;
+    string course = 2;
+    int32 price = 3;
+}
+
+message CourseInfoResponse {
+    repeated Course courses = 1;
 }
