@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rishad004/learning-platform-go/user-service/pkg"
 )
 
 func (u *UserHandler) CourseRouters(r *gin.Engine) {
-	r.GET("/user/course", u.GetCourseInfo)
+	r.GET("/user/course", pkg.Middleware, u.GetCourseInfo)
 }
 
 func (u *UserHandler) GetCourseInfo(c *gin.Context) {
