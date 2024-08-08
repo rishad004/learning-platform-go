@@ -54,8 +54,13 @@ func (r *instituteRepo) DeleteCourseById(Id string) error {
 	if err != nil {
 		return err
 	}
-	err = r.DB.Where("ID=?", id).Delete(model.Courses{}).Error
-	if err != nil {
+
+	var course model.Courses
+	if err = r.DB.First(&course, "id=?", id).Error; err != nil {
+		return err
+	}
+
+	if err = r.DB.Delete(&course).Error; err != nil {
 		return err
 	}
 	return nil
