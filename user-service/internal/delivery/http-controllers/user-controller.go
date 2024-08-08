@@ -15,6 +15,9 @@ type UserHandler struct {
 }
 
 func (u *UserHandler) UserRouters(r *gin.Engine) {
+
+	u.CourseRouters(r)
+
 	r.POST("/signup", u.Signup)
 	r.POST("/login", u.Login)
 }
