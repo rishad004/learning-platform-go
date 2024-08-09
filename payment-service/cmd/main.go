@@ -40,12 +40,12 @@ func main() {
 	reflection.Register(g)
 
 	go func() {
-		listen, err := net.Listen("tcp", ":50051")
+		listen, err := net.Listen("tcp", ":9091")
 		if err != nil {
 			log.Fatal("failed to listen, err: ", err)
 		}
 
-		log.Println("Server listening on port :50051")
+		log.Println("Server listening on port :9091")
 		if err := g.Serve(listen); err != nil {
 			log.Fatal("failed to listen - err: ", err)
 		}
@@ -55,7 +55,7 @@ func main() {
 		r := gin.Default()
 		httpController.PaymentRouters(r)
 
-		if err := r.Run(":50050"); err != nil {
+		if err := r.Run(":9091"); err != nil {
 			log.Fatal("failed to listen, err: ", err)
 		}
 	}()
