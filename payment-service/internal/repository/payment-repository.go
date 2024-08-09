@@ -9,7 +9,7 @@ import (
 )
 
 type PaymentRepo interface {
-	RazorIdCreate(courses *institute_pb.CourseInfoResponse, course int, price int) (string, error)
+	RazorIdCreate(courses *institute_pb.CourseInfoResponse, course int) (string, error)
 }
 
 type paymentRepo struct {
@@ -20,7 +20,7 @@ func NewPaymentRepository(Db *gorm.DB) PaymentRepo {
 	return &paymentRepo{DB: Db}
 }
 
-func (r *paymentRepo) RazorIdCreate(courses *institute_pb.CourseInfoResponse, course int, price int) (string, error) {
+func (r *paymentRepo) RazorIdCreate(courses *institute_pb.CourseInfoResponse, course int) (string, error) {
 	for _, v := range courses.Courses {
 		if v.Id == int32(course) {
 			razorKey, err := pkg.Executerazorpay(v.Course, int(v.Price))
