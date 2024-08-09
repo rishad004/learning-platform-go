@@ -11,6 +11,7 @@ import (
 
 type PaymentRepo interface {
 	RazorIdCreate(courses *institute_pb.CourseInfoResponse, course int, userId int) (string, error)
+	PaymentVerification(razor model.Razor) error
 }
 
 type paymentRepo struct {
@@ -38,4 +39,17 @@ func (r *paymentRepo) RazorIdCreate(courses *institute_pb.CourseInfoResponse, co
 		}
 	}
 	return "", errors.New("course not found")
+}
+
+func (r *paymentRepo) PaymentVerification(razor model.Razor) error {
+	if err := pkg.RazorPaymentVerification(razor.Signature, razor.Order, razor.Payment); err != nil {
+		return err
+	}
+	if err := r.DB.Model(&model.Booking{}).Where("order_id = ?", razor.Order).Update("payment_id", razor.Payment).Error; err != nil {
+		return err
+	}
+	if err := r.DB.Model(&model.Booking{}).Where("order_id = ?", razor.Order).Update("payment_status", true).Error; err != nil {
+		return err
+	}
+	return nil
 }

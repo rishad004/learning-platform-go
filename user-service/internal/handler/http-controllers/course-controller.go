@@ -17,5 +17,5 @@ func (u *UserHandler) GetCourseInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't fetch courses!"})
 		return
 	}
-	c.JSON(http.StatusOK, courses)
+	c.JSON(http.StatusOK, gin.H{"message": "success", "course": courses})
 }

@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -30,18 +29,22 @@ func JwtCreate(UserID uint, Email string) (string, error) {
 }
 
 func Middleware(c *gin.Context) {
-	tokenString, err := c.Cookie("Jwt-User")
+	tokenString, _ := c.Cookie("Jwt-User")
 
-	if err != nil {
+	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.Abort()
+		return
 	}
 	claims := &Claims{}
 	token, er := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("SECRET_KEY")), nil
+		return []byte("your_secret_key"), nil
 	})
 
 	if er != nil || !token.Valid {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.Abort()
+		return
 	}
 
 	c.Set("id", claims.UserID)

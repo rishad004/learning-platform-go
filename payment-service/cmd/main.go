@@ -54,8 +54,9 @@ func main() {
 	go func() {
 		r := gin.Default()
 		httpController.PaymentRouters(r)
+		r.LoadHTMLGlob("../template/*")
 
-		if err := r.Run(":9091"); err != nil {
+		if err := r.Run(":9090"); err != nil {
 			log.Fatal("failed to listen, err: ", err)
 		}
 	}()

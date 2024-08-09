@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/gin-gonic/gin"
 	"github.com/rishad004/learning-platform-go/user-service/internal/model"
 	institute_pb "github.com/rishad004/learning-platform-go/user-service/proto/client/institute"
 )
@@ -15,7 +16,7 @@ type UserRepo interface {
 type UserService interface {
 	Signup(user model.Users) error
 	Login(user model.Users) (model.Users, error)
-	GetCourseInfo() (*institute_pb.CourseInfoResponse, error)
+	GetCourseInfo() ([]gin.H, error)
 }
 
 type userService struct {
@@ -42,10 +43,18 @@ func (u *userService) Login(user model.Users) (model.Users, error) {
 	return check, nil
 }
 
-func (u *userService) GetCourseInfo() (*institute_pb.CourseInfoResponse, error) {
+func (u *userService) GetCourseInfo() ([]gin.H, error) {
+	var courses []gin.H
 	course, err := u.instituteClient.GetCourseInfo(context.Background(), &institute_pb.GetCourseInfoRequest{})
 	if err != nil {
 		return nil, err
 	}
-	return course, nil
+	for _, v := range course.Courses {
+		courses = append(courses, gin.H{
+			"Id":     v.Id,
+			"Course": v.Course,
+			"Price":  v.Price,
+		})
+	}
+	return courses, nil
 }

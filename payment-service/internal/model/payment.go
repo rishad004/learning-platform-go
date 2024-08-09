@@ -10,3 +10,9 @@ type Booking struct {
 	CourseId      uint
 	PaymentStatus bool
 }
+
+type Razor struct {
+	Order     string `json:"OrderID"`
+	Payment   string `json:"PaymentID"`
+	Signature string `json:"Signature"`
+}

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.12.4
-// source: institute.proto
+// source: institute-service/proto/institute.proto
 
 package institute_service
 
@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AdminService_Login_FullMethodName         = "/institute.AdminService/Login"
-	AdminService_AddCourse_FullMethodName     = "/institute.AdminService/AddCourse"
-	AdminService_DeleteCourse_FullMethodName  = "/institute.AdminService/DeleteCourse"
-	AdminService_GetCourseInfo_FullMethodName = "/institute.AdminService/GetCourseInfo"
+	AdminService_Login_FullMethodName            = "/institute.AdminService/Login"
+	AdminService_BlockUnblockUser_FullMethodName = "/institute.AdminService/BlockUnblockUser"
+	AdminService_AddCourse_FullMethodName        = "/institute.AdminService/AddCourse"
+	AdminService_DeleteCourse_FullMethodName     = "/institute.AdminService/DeleteCourse"
+	AdminService_GetCourseInfo_FullMethodName    = "/institute.AdminService/GetCourseInfo"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminServiceClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	BlockUnblockUser(ctx context.Context, in *BlockUnblockUserRequest, opts ...grpc.CallOption) (*BlockUnblockUserResponse, error)
 	AddCourse(ctx context.Context, in *AddCourseRequest, opts ...grpc.CallOption) (*AddCourseResponse, error)
 	DeleteCourse(ctx context.Context, in *DeleteCourseRequest, opts ...grpc.CallOption) (*DeleteCourseResponse, error)
 	GetCourseInfo(ctx context.Context, in *GetCourseInfoRequest, opts ...grpc.CallOption) (*CourseInfoResponse, error)
@@ -47,6 +49,16 @@ func (c *adminServiceClient) Login(ctx context.Context, in *LoginRequest, opts .
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, AdminService_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminServiceClient) BlockUnblockUser(ctx context.Context, in *BlockUnblockUserRequest, opts ...grpc.CallOption) (*BlockUnblockUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BlockUnblockUserResponse)
+	err := c.cc.Invoke(ctx, AdminService_BlockUnblockUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +100,7 @@ func (c *adminServiceClient) GetCourseInfo(ctx context.Context, in *GetCourseInf
 // for forward compatibility.
 type AdminServiceServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	BlockUnblockUser(context.Context, *BlockUnblockUserRequest) (*BlockUnblockUserResponse, error)
 	AddCourse(context.Context, *AddCourseRequest) (*AddCourseResponse, error)
 	DeleteCourse(context.Context, *DeleteCourseRequest) (*DeleteCourseResponse, error)
 	GetCourseInfo(context.Context, *GetCourseInfoRequest) (*CourseInfoResponse, error)
@@ -103,6 +116,9 @@ type UnimplementedAdminServiceServer struct{}
 
 func (UnimplementedAdminServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAdminServiceServer) BlockUnblockUser(context.Context, *BlockUnblockUserRequest) (*BlockUnblockUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BlockUnblockUser not implemented")
 }
 func (UnimplementedAdminServiceServer) AddCourse(context.Context, *AddCourseRequest) (*AddCourseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCourse not implemented")
@@ -148,6 +164,24 @@ func _AdminService_Login_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServiceServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminService_BlockUnblockUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BlockUnblockUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).BlockUnblockUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_BlockUnblockUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).BlockUnblockUser(ctx, req.(*BlockUnblockUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -218,6 +252,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AdminService_Login_Handler,
 		},
 		{
+			MethodName: "BlockUnblockUser",
+			Handler:    _AdminService_BlockUnblockUser_Handler,
+		},
+		{
 			MethodName: "AddCourse",
 			Handler:    _AdminService_AddCourse_Handler,
 		},
@@ -231,5 +269,5 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "institute.proto",
+	Metadata: "institute-service/proto/institute.proto",
 }
