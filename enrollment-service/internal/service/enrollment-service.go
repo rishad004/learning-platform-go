@@ -9,7 +9,7 @@ import (
 type EnrollemntRepo interface{}
 
 type EnrollmentService interface {
-	BookCourse(course int) (string, error)
+	BookCourse(course int, userId int) (string, error)
 }
 
 type enrollmentService struct {
@@ -21,8 +21,8 @@ func NewEnrollemntService(repo EnrollemntRepo, payment payment_pb.PaymentService
 	return &enrollmentService{repo: repo, paymentClient: payment}
 }
 
-func (s *enrollmentService) BookCourse(course int) (string, error) {
-	transaction_id, err := s.paymentClient.ProcessPayment(context.Background(), &payment_pb.ProcessPaymentRequest{Course: int32(course)})
+func (s *enrollmentService) BookCourse(course int, userId int) (string, error) {
+	transaction_id, err := s.paymentClient.ProcessPayment(context.Background(), &payment_pb.ProcessPaymentRequest{Course: int32(course), Price: int32(userId)})
 	if err != nil {
 		return "", err
 	}

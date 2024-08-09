@@ -23,13 +23,15 @@ func (h *EnrollmentHandler) EnrollmentRouters(r *gin.Engine) {
 
 func (h *EnrollmentHandler) BookCourse(c *gin.Context) {
 	Id := c.Query("id")
+	user := c.MustGet("id").(int)
 
 	id, err := strconv.Atoi(Id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body!"})
 		return
 	}
-	transaction_id, er := h.Service.BookCourse(id)
+
+	transaction_id, er := h.Service.BookCourse(id, user)
 	if er != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't enroll the course!"})
 		return
