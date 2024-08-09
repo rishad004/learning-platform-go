@@ -14,6 +14,7 @@ import (
 	"github.com/rishad004/learning-platform-go/payment-service/internal/service"
 	"github.com/rishad004/learning-platform-go/payment-service/pkg"
 	pb "github.com/rishad004/learning-platform-go/payment-service/proto"
+	institute_pb "github.com/rishad004/learning-platform-go/payment-service/proto/client/institute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -21,8 +22,15 @@ import (
 func main() {
 	Db := pkg.InitDatabase()
 
+	connInstitute, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to connect to user service: %v", err)
+	}
+	defer connInstitute.Close()
+	instituteService := institute_pb.NewAdminServiceClient(connInstitute)
+
 	repo := repository.NewPaymentRepository(Db)
-	paymentService := service.NewPaymentService(repo)
+	paymentService := service.NewPaymentService(repo, instituteService)
 	paymentHandler := grpchandlers.NewPaymentHandler(paymentService)
 	httpController := httpcontrollers.NewPaymentController(paymentService)
 

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package institute;
+
+option go_package = "github.com/rishad004/learning-platform-go/institute-service";
+
+service AdminService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc AddCourse(AddCourseRequest) returns (AddCourseResponse);
+    rpc DeleteCourse(DeleteCourseRequest) returns (DeleteCourseResponse);
+    rpc GetCourseInfo(GetCourseInfoRequest) returns (CourseInfoResponse);
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string message = 3;
+}
+
+message AddCourseRequest {
+    string course = 1;
+    int32 price = 2;
+}
+
+message AddCourseResponse {
+    string message = 1;
+}
+
+message DeleteCourseRequest {}
+
+message DeleteCourseResponse {
+    string message = 2;
+}
+
+message GetCourseInfoRequest {}
+
+message Course{
+    int32 id = 1;
+    string course = 2;
+    int32 price = 3;
+}
+
+message CourseInfoResponse {
+    repeated Course courses = 1;
+}
