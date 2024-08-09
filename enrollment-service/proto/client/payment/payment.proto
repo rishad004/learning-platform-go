@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "github.com/rishad004/learning-platform-go/payment-service";
+
+service PaymentService {
+    rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
+}
+
+message ProcessPaymentRequest {
+    int32 course = 1;
+    int32 price = 2;
+}
+
+message ProcessPaymentResponse {
+    string transaction_id = 2;
+}
